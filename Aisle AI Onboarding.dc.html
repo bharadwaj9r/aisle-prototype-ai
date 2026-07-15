@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+  * { -webkit-font-smoothing: antialiased; box-sizing: border-box; }
+  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif; }
+  button, input, textarea { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif; }
+  a { color: var(--accent, #FF4F5E); text-decoration: none; }
+  a:hover { color: #e23f4e; }
+  ::-webkit-scrollbar { width: 0; height: 0; }
+  [contenteditable]:focus { outline: none; }
+  :root { --accent:#FF4F5E; --accent-2:#7B2FF7; --img-radius:16px; --hero-aspect:4 / 5; --card-bg:#fff; --card-border:1px solid #E5E5EA; --card-shadow:0 1px 3px rgba(0,0,0,.04); }
+  @keyframes aisleSpin { to { transform: rotate(360deg); } }
+  @keyframes aisleFadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes aisleFade { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes aisleScanImg { from { opacity: 0; transform: scale(1.06); } to { opacity: 1; transform: scale(1); } }
+  @keyframes aisleSheetIn { from { transform: translateY(105%); } to { transform: translateY(0); } }
+  @keyframes aisleDot { 0%, 60%, 100% { transform: translateY(0); opacity: .4; } 30% { transform: translateY(-4px); opacity: 1; } }
+  @keyframes aislePop { 0% { transform: scale(.6); opacity: 0; } 60% { transform: scale(1.08); } 100% { transform: scale(1); opacity: 1; } }
+  @keyframes aisleConfetti { 0% { transform: translateY(-30px) rotate(0deg); opacity: 1; } 100% { transform: translateY(900px) rotate(720deg); opacity: 0; } }
+  @keyframes aisleBubbleIn { from { opacity: 0; transform: translateY(8px) scale(.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
+  @keyframes aisleBeam { 0% { top: 4%; } 50% { top: 92%; } 100% { top: 4%; } }
+  @keyframes aisleWave { 0%,100% { transform: scaleY(.35); } 50% { transform: scaleY(1); } }
+  @keyframes aisleRing { 0% { transform: scale(1); opacity: .5; } 100% { transform: scale(1.9); opacity: 0; } }
+  @keyframes aislePulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+</style>
+<script src="image-slot.js"></script>
+</helmet>
+
+<div ref="{{ rootRef }}" style="min-height: 100vh; width: 100%; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at 50% 0%, #f4f4f6 0%, #e3e3e8 100%); padding: 48px 20px; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', sans-serif;">
+
+  <div style="position: relative; width: 413px; height: 872px; background: #0a0a0a; border-radius: 56px; padding: 10px; box-shadow: 0 2px 6px rgba(0,0,0,.35), 0 40px 80px -20px rgba(0,0,0,.5); flex: none;">
+    <div style="position: relative; width: 393px; height: 852px; background: #FFFFFF; border-radius: 46px; overflow: hidden;">
+
+      <!-- STATUS BAR -->
+      <div style="position: absolute; top: 0; left: 0; right: 0; height: 54px; z-index: 60; display: flex; align-items: flex-end; justify-content: space-between; padding: 0 30px 12px; pointer-events: none; color: {{ statusColor }};">
+        <div style="font-size: 15px; font-weight: 600; letter-spacing: -.2px; font-variant-numeric: tabular-nums;">9:41</div>
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="4.5" width="3" height="7.5" rx="1"/><rect x="10" y="2" width="3" height="10" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+          <svg width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><path d="M8.5 2.2c2.6 0 5 1 6.8 2.7l-1.4 1.5A7.6 7.6 0 0 0 8.5 4.3 7.6 7.6 0 0 0 3.1 6.4L1.7 4.9A9.7 9.7 0 0 1 8.5 2.2Zm0 3.6c1.6 0 3 .6 4.1 1.6l-1.5 1.5A3.7 3.7 0 0 0 8.5 9.4 3.7 3.7 0 0 0 5.9 8.9L4.4 7.4A5.8 5.8 0 0 1 8.5 5.8Zm0 3.5 1.5 1.5-1.5 1.2-1.5-1.2Z"/></svg>
+          <div style="display: flex; align-items: center; gap: 2px;"><div style="width: 22px; height: 11px; border: 1px solid currentColor; border-radius: 3px; opacity: .55; padding: 1.5px; display: flex;"><div style="flex: 1; background: currentColor; border-radius: 1px;"></div></div><div style="width: 1.5px; height: 4px; background: currentColor; opacity: .4; border-radius: 1px;"></div></div>
+        </div>
+      </div>
+      <div style="position: absolute; top: 12px; left: 50%; transform: translateX(-50%); width: 125px; height: 35px; background: #000; border-radius: 20px; z-index: 70;"></div>
+
+      <!-- ============ SCREEN 1: UPLOAD ============ -->
+      <sc-if value="{{ isUpload }}" hint-placeholder-val="{{ true }}">
+        <div style="position: absolute; inset: 0; padding: 72px 16px 0; display: flex; flex-direction: column; animation: aisleFade .4s ease;">
+          <div style="animation: aisleFadeUp .5s ease both;">
+            <h1 style="margin: 0; font-size: 27px; font-weight: 700; letter-spacing: -.5px; line-height: 1.15; color: #111111;">Let AI pick your best angles.</h1>
+            <p style="margin: 10px 0 0; font-size: 16px; line-height: 1.4; color: #333333;">Select 10–15 photos. Our engine curates the 5 most attractive shots and drops the rest.</p>
+          </div>
+
+          <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; min-height: 0;">
+            <sc-if value="{{ notSelected }}" hint-placeholder-val="{{ true }}">
+              <button onClick="{{ selectPhotos }}" style="width: 100%; aspect-ratio: 1 / 1; max-height: 320px; background: #F2F2F7; border: 2px dashed #C7C7CC; border-radius: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; cursor: pointer; transition: border-color .15s, transform .15s;" style-hover="border-color: var(--accent); transform: scale(1.01);" style-active="transform: scale(.99);">
+                <svg width="52" height="52" viewBox="0 0 52 52" fill="none"><rect x="10" y="16" width="30" height="24" rx="4" transform="rotate(-8 25 28)" stroke="var(--accent)" stroke-width="2.4"/><rect x="13" y="14" width="30" height="24" rx="4" fill="#F2F2F7" stroke="var(--accent)" stroke-width="2.4"/><circle cx="21" cy="22" r="2.6" fill="var(--accent)"/><path d="M15 34l7-7 5 4 5-6 8 9" stroke="var(--accent)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <div style="text-align: center;"><div style="font-size: 16px; font-weight: 600; color: var(--accent);">Select from camera roll</div><div style="font-size: 13px; color: #8E8E93; margin-top: 3px;">Choose 10–15 photos</div></div>
+              </button>
+            </sc-if>
+            <sc-if value="{{ photosSelected }}" hint-placeholder-val="{{ false }}">
+              <div style="animation: aisleFadeUp .35s ease both;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                  <div style="display: flex; align-items: center; gap: 7px;"><div style="width: 20px; height: 20px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6.2l2.6 2.6L10 3.4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span style="font-size: 15px; font-weight: 600; color: #111;">12 photos selected</span></div>
+                  <button onClick="{{ selectPhotos }}" style="border: none; background: none; font-size: 15px; color: var(--accent); font-weight: 600; cursor: pointer;">Edit</button>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;">
+                  <sc-for list="{{ allPhotos }}" as="ph" hint-placeholder-count="12">
+                    <div style="aspect-ratio: 1 / 1; border-radius: 10px; overflow: hidden; background: #F2F2F7;"><img src="{{ ph }}" style="width: 100%; height: 100%; object-fit: cover; display: block;"/></div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+
+          <div style="padding: 14px 4px 30px;">
+            <p style="margin: 0 0 12px; font-size: 13px; line-height: 1.4; color: #8E8E93; text-align: center;">Privacy first. Unused photos are processed locally and never stored.</p>
+            <button onClick="{{ beginProcessing }}" disabled="{{ notSelected }}" style="width: 100%; height: 56px; border: none; border-radius: 28px; background: {{ ctaBg }}; color: #fff; font-size: 17px; font-weight: 600; cursor: {{ ctaCursor }}; transition: transform .12s, background .2s;" style-active="transform: scale(.98);">{{ ctaLabel }}</button>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ============ SCREEN 3: REVIEW ============ -->
+      <sc-if value="{{ isReview }}" hint-placeholder-val="{{ false }}">
+        <div style="position: absolute; inset: 0; display: flex; flex-direction: column; animation: aisleFade .4s ease;">
+          <div style="padding: 62px 16px 12px; background: rgba(255,255,255,.86); backdrop-filter: blur(12px); position: relative; z-index: 5; border-bottom: .5px solid #E5E5EA;">
+            <h1 style="margin: 0; font-size: 27px; font-weight: 700; letter-spacing: -.5px; color: #111111;">Your Top 5 Photos</h1>
+            <p style="margin: 4px 0 0; font-size: 13px; color: #8E8E93;">Long-press to reorder · tap swap to replace</p>
+          </div>
+          <div style="flex: 1; overflow-y: auto; padding: 12px 16px 120px;">
+            <div onPointerDown="{{ pressHero }}" onPointerUp="{{ releasePress }}" onPointerLeave="{{ releasePress }}" style="position: relative; width: 100%; aspect-ratio: var(--hero-aspect); border-radius: var(--img-radius); overflow: hidden; transition: transform .2s ease, box-shadow .2s ease; transform: {{ heroTransform }}; box-shadow: {{ heroShadow }};">
+              <image-slot id="aisle-top-1" src="uploads/pasted-1784141784172-0.png" shape="rect" placeholder="#1"></image-slot>
+              <div style="position: absolute; top: 10px; left: 10px; background: var(--accent); color: #fff; font-size: 13px; font-weight: 700; padding: 4px 10px; border-radius: 20px; pointer-events: none;">#1</div>
+              <button onClick="{{ swap }}" style="position: absolute; bottom: 10px; right: 10px; width: 34px; height: 34px; border: none; border-radius: 50%; background: rgba(20,20,20,.42); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; cursor: pointer;" style-active="transform: rotate(-180deg); transition: transform .4s;">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 6a5 5 0 0 1 8.5-2.3M13 3.5v3h-3" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 10a5 5 0 0 1-8.5 2.3M3 12.5v-3h3" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px;">
+              <sc-for list="{{ gridPhotos }}" as="g" hint-placeholder-count="4">
+                <div style="position: relative; aspect-ratio: 1 / 1; border-radius: var(--img-radius); overflow: hidden;">
+                  <image-slot id="{{ g.id }}" src="{{ g.src }}" shape="rect" placeholder="#{{ g.rank }}"></image-slot>
+                  <div style="position: absolute; top: 8px; left: 8px; background: rgba(20,20,20,.5); backdrop-filter: blur(6px); color: #fff; font-size: 12px; font-weight: 700; padding: 3px 8px; border-radius: 16px; pointer-events: none;">#{{ g.rank }}</div>
+                  <button onClick="{{ swap }}" style="position: absolute; bottom: 8px; right: 8px; width: 32px; height: 32px; border: none; border-radius: 50%; background: rgba(20,20,20,.42); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; cursor: pointer;" style-active="transform: rotate(-180deg); transition: transform .4s;">
+                    <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 6a5 5 0 0 1 8.5-2.3M13 3.5v3h-3" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 10a5 5 0 0 1-8.5 2.3M3 12.5v-3h3" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </button>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 12px 16px 30px; background: linear-gradient(to top, #fff 62%, rgba(255,255,255,0));">
+            <button onClick="{{ goVibe }}" style="width: 100%; height: 56px; border: none; border-radius: 28px; background: var(--accent); color: #fff; font-size: 17px; font-weight: 600; cursor: pointer;" style-active="transform: scale(.98); filter: brightness(.95);">Next: The Vibe Check</button>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ============ SCREEN 4: VIBE CHECK ============ -->
+      <sc-if value="{{ isVibe }}" hint-placeholder-val="{{ false }}">
+        <div style="position: absolute; inset: 0; display: flex; flex-direction: column; background: #fff; animation: aisleFade .4s ease;">
+          <div style="padding: 60px 16px 10px; display: flex; align-items: center; gap: 10px; border-bottom: .5px solid #E5E5EA;">
+            <button onClick="{{ goReview }}" style="width: 40px; height: 40px; margin-left: -8px; border: none; background: none; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+              <svg width="12" height="20" viewBox="0 0 12 20" fill="none"><path d="M10 2L3 10l7 8" stroke="var(--accent)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div style="width: 38px; height: 38px; border-radius: 12px; overflow: hidden; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%); display: flex; align-items: center; justify-content: center;">
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 4l2.2 4.4L18 9.2l-3.5 3.4.8 4.8L11 15.2 6.7 17.4l.8-4.8L4 9.2l4.8-.8z" fill="rgba(255,255,255,.92)"/></svg>
+            </div>
+            <div style="flex: 1;"><div style="font-size: 16px; font-weight: 600; color: #111;">Aisle AI</div><div style="font-size: 12px; color: #8E8E93;">Vibe Check · {{ qProgress }}</div></div>
+            <div style="padding: 6px 11px; background: #F2F2F7; border-radius: 16px; display: flex; align-items: center; gap: 6px;"><div style="width: 6px; height: 6px; border-radius: 50%; background: #34C759;"></div><span style="font-size: 12px; font-weight: 600; color: #4b4b50;">Auto</span></div>
+          </div>
+
+          <div ref="{{ chatScrollRef }}" style="flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px;">
+            <sc-for list="{{ chat }}" as="m" hint-placeholder-count="1">
+              <div style="display: flex; justify-content: {{ m.justify }};">
+                <sc-if value="{{ m.isVoice }}" hint-placeholder-val="{{ false }}">
+                  <div style="display: flex; align-items: center; gap: 10px; max-width: 78%; padding: 11px 15px; border-radius: 20px; border-bottom-right-radius: 6px; background: var(--accent); animation: aisleBubbleIn .3s ease both;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="12" fill="rgba(255,255,255,.22)"/><path d="M10 8l6 4-6 4z" fill="#fff"/></svg>
+                    <div style="display: flex; align-items: center; gap: 3px; height: 22px;"><div style="width:3px;height:40%;background:rgba(255,255,255,.9);border-radius:2px"></div><div style="width:3px;height:80%;background:rgba(255,255,255,.9);border-radius:2px"></div><div style="width:3px;height:55%;background:rgba(255,255,255,.9);border-radius:2px"></div><div style="width:3px;height:100%;background:rgba(255,255,255,.9);border-radius:2px"></div><div style="width:3px;height:65%;background:rgba(255,255,255,.9);border-radius:2px"></div><div style="width:3px;height:35%;background:rgba(255,255,255,.9);border-radius:2px"></div><div style="width:3px;height:75%;background:rgba(255,255,255,.9);border-radius:2px"></div></div>
+                    <span style="font-size: 14px; color: rgba(255,255,255,.95); font-variant-numeric: tabular-nums;">{{ m.text }}</span>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ m.isText }}" hint-placeholder-val="{{ true }}">
+                  <div style="max-width: 80%; padding: 11px 15px; border-radius: 20px; font-size: 16px; line-height: 1.35; animation: aisleBubbleIn .3s ease both; background: {{ m.bg }}; color: {{ m.color }}; border-bottom-left-radius: {{ m.blr }}; border-bottom-right-radius: {{ m.brr }};">{{ m.text }}</div>
+                </sc-if>
+              </div>
+            </sc-for>
+            <sc-if value="{{ aiTyping }}" hint-placeholder-val="{{ false }}">
+              <div style="display: flex; justify-content: flex-start;">
+                <div style="padding: 14px 16px; border-radius: 20px; border-bottom-left-radius: 6px; background: #F2F2F7; display: flex; gap: 4px; align-items: center;">
+                  <div style="width: 7px; height: 7px; border-radius: 50%; background: #8E8E93; animation: aisleDot 1.2s infinite;"></div>
+                  <div style="width: 7px; height: 7px; border-radius: 50%; background: #8E8E93; animation: aisleDot 1.2s infinite .2s;"></div>
+                  <div style="width: 7px; height: 7px; border-radius: 50%; background: #8E8E93; animation: aisleDot 1.2s infinite .4s;"></div>
+                </div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ userTyping }}" hint-placeholder-val="{{ false }}">
+              <div style="display: flex; justify-content: flex-end;">
+                <div style="padding: 14px 16px; border-radius: 20px; border-bottom-right-radius: 6px; background: var(--accent); display: flex; gap: 4px; align-items: center;">
+                  <div style="width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,.85); animation: aisleDot 1.2s infinite;"></div>
+                  <div style="width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,.85); animation: aisleDot 1.2s infinite .2s;"></div>
+                  <div style="width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,.85); animation: aisleDot 1.2s infinite .4s;"></div>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+
+          <!-- auto-interview status bar -->
+          <div style="padding: 16px 16px 30px; border-top: .5px solid #E5E5EA; display: flex; align-items: center; justify-content: center; min-height: 76px;">
+            <sc-if value="{{ vibeDone }}" hint-placeholder-val="{{ false }}">
+              <div style="display: flex; align-items: center; gap: 8px; color: #34C759; font-size: 16px; font-weight: 600; animation: aislePop .4s ease both;"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" fill="#34C759"/><path d="M5.5 10.2l2.8 2.8L14.5 6.8" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>Vibe check complete</div>
+            </sc-if>
+            <sc-if value="{{ vibeRunning }}" hint-placeholder-val="{{ true }}">
+              <div style="display: flex; align-items: center; gap: 10px; color: #8E8E93; font-size: 14px;"><div style="display: flex; gap: 4px;"><div style="width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: aisleDot 1.2s infinite;"></div><div style="width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: aisleDot 1.2s infinite .2s;"></div><div style="width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: aisleDot 1.2s infinite .4s;"></div></div>Aisle AI is running your vibe check…</div>
+            </sc-if>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ============ SCREEN 5: PUBLISH (Hinge-style profile) ============ -->
+      <sc-if value="{{ isPublish }}" hint-placeholder-val="{{ false }}">
+        <div style="position: absolute; inset: 0; display: flex; flex-direction: column; background: #EDEDF0; animation: aisleFade .4s ease;">
+          <div style="padding: 60px 16px 12px; background: rgba(255,255,255,.9); backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: space-between; border-bottom: .5px solid #E5E5EA; z-index: 5;">
+            <div><div style="font-size: 20px; font-weight: 700; color: #111; letter-spacing: -.3px;">Profile Preview</div><div style="font-size: 12px; color: #8E8E93;">This is how you'll appear</div></div>
+            <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent-2)); display: flex; align-items: center; justify-content: center;"><svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M13.5 3.5l3 3L7 16l-4 1 1-4z" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/></svg></div>
+          </div>
+
+          <div style="flex: 1; overflow-y: auto; padding: 12px 12px 120px;">
+            <!-- HERO PHOTO w/ name overlay -->
+            <div style="position: relative; border-radius: 20px; overflow: hidden; aspect-ratio: 3 / 4; box-shadow: 0 4px 20px rgba(0,0,0,.1);">
+              <image-slot id="aisle-pf-1" src="uploads/pasted-1784141784172-0.png" shape="rect" placeholder="Photo 1"></image-slot>
+              <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.62) 0%, rgba(0,0,0,0) 42%); pointer-events: none;"></div>
+              <div style="position: absolute; left: 18px; bottom: 16px; right: 18px; pointer-events: none;">
+                <div style="font-size: 13px; color: rgba(255,255,255,.9); margin-bottom: 5px; text-shadow: 0 1px 4px rgba(0,0,0,.35);">Straight off the barber's chair</div>
+                <div style="display: flex; align-items: center; gap: 7px;"><span style="font-size: 28px; font-weight: 700; color: #fff; letter-spacing: -.4px;">Arjun</span><span style="font-size: 24px; font-weight: 400; color: rgba(255,255,255,.9);">28</span><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" fill="#2A9BF4"/><path d="M6 10.2l2.6 2.6L14 7.2" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div style="display: flex; align-items: center; gap: 6px; margin-top: 6px;"><div style="width: 8px; height: 8px; border-radius: 50%; background: #34C759;"></div><span style="font-size: 13px; color: rgba(255,255,255,.9);">Active today</span></div>
+              </div>
+              <sc-if value="{{ showLikes }}" hint-placeholder-val="{{ true }}"><button style="position: absolute; bottom: 14px; right: 14px; width: 46px; height: 46px; border: none; border-radius: 50%; background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,.2); display: flex; align-items: center; justify-content: center; cursor: pointer;" style-active="transform: scale(.9);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 20s-7-4.5-7-9.3A3.9 3.9 0 0 1 12 8a3.9 3.9 0 0 1 7 2.7C19 15.5 12 20 12 20z" stroke="var(--accent)" stroke-width="1.8" stroke-linejoin="round"/></svg></button></sc-if>
+            </div>
+
+            <!-- basics pills -->
+            <div style="display: flex; flex-wrap: wrap; gap: 7px; margin: 14px 2px;">
+              <sc-for list="{{ basics }}" as="b" hint-placeholder-count="3">
+                <div style="display: flex; align-items: center; gap: 6px; padding: 8px 13px; background: #fff; border-radius: 20px; box-shadow: 0 1px 2px rgba(0,0,0,.05);"><span style="color: #6b6b70; display: flex;">{{ b.icon }}</span><span style="font-size: 14px; color: #333; font-weight: 500;">{{ b.label }}</span></div>
+              </sc-for>
+            </div>
+
+            <!-- prompt 1 -->
+            <div style="position: relative; background: var(--card-bg); border: var(--card-border); box-shadow: var(--card-shadow); border-radius: 18px; padding: 18px; margin-bottom: 12px;">
+              <div style="font-size: 13px; color: #8E8E93; font-weight: 500;">{{ p0.q }}</div>
+              <div contenteditable="true" style="font-size: 21px; color: #111; line-height: 1.32; margin-top: 8px; font-weight: 500;" style-focus="background: #FFF5E5; border-radius: 6px;">{{ p0.a }}</div>
+              <div style="position: absolute; top: 14px; right: 14px; display: flex; gap: 6px;"><button onClick="{{ p0.regen }}" style="width: 30px; height: 30px; border: 1px solid #E5E5EA; background: #F2F2F7; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;" style-active="transform: rotate(-90deg); transition: transform .3s;"><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="14" height="14" rx="4" stroke="#111" stroke-width="1.6"/><circle cx="7" cy="7" r="1.4" fill="#111"/><circle cx="10" cy="10" r="1.4" fill="#111"/><circle cx="13" cy="13" r="1.4" fill="#111"/></svg></button></div>
+              <sc-if value="{{ showLikes }}" hint-placeholder-val="{{ true }}"><button style="position: absolute; bottom: -14px; right: 18px; width: 40px; height: 40px; border: none; border-radius: 50%; background: #fff; box-shadow: 0 3px 10px rgba(0,0,0,.16); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 2;" style-active="transform: scale(.9);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 20s-7-4.5-7-9.3A3.9 3.9 0 0 1 12 8a3.9 3.9 0 0 1 7 2.7C19 15.5 12 20 12 20z" stroke="var(--accent)" stroke-width="1.8" stroke-linejoin="round"/></svg></button></sc-if>
+            </div>
+
+            <!-- photo 2 -->
+            <div style="position: relative; border-radius: 18px; overflow: hidden; aspect-ratio: 3 / 4; margin-bottom: 12px;">
+              <img src="uploads/pasted-1784142090408-0.png" style="width: 100%; height: 100%; object-fit: cover; object-position: 74% 42%; display: block;"/>
+              <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.5), rgba(0,0,0,0) 34%); pointer-events: none;"></div>
+              <div style="position: absolute; left: 16px; bottom: 15px; right: 66px; font-size: 15px; font-weight: 500; color: #fff; pointer-events: none; text-shadow: 0 1px 4px rgba(0,0,0,.35);">Somewhere past Manali</div>
+              <sc-if value="{{ showLikes }}" hint-placeholder-val="{{ true }}"><button style="position: absolute; bottom: 14px; right: 14px; width: 46px; height: 46px; border: none; border-radius: 50%; background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,.2); display: flex; align-items: center; justify-content: center; cursor: pointer;" style-active="transform: scale(.9);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 20s-7-4.5-7-9.3A3.9 3.9 0 0 1 12 8a3.9 3.9 0 0 1 7 2.7C19 15.5 12 20 12 20z" stroke="var(--accent)" stroke-width="1.8" stroke-linejoin="round"/></svg></button></sc-if>
+            </div>
+
+            <!-- prompt 2 -->
+            <div style="position: relative; background: var(--card-bg); border: var(--card-border); box-shadow: var(--card-shadow); border-radius: 18px; padding: 18px; margin-bottom: 12px;">
+              <div style="font-size: 13px; color: #8E8E93; font-weight: 500;">{{ p1.q }}</div>
+              <div contenteditable="true" style="font-size: 21px; color: #111; line-height: 1.32; margin-top: 8px; font-weight: 500;" style-focus="background: #FFF5E5; border-radius: 6px;">{{ p1.a }}</div>
+              <div style="position: absolute; top: 14px; right: 14px; display: flex; gap: 6px;"><button onClick="{{ p1.regen }}" style="width: 30px; height: 30px; border: 1px solid #E5E5EA; background: #F2F2F7; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;" style-active="transform: rotate(-90deg); transition: transform .3s;"><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="14" height="14" rx="4" stroke="#111" stroke-width="1.6"/><circle cx="7" cy="7" r="1.4" fill="#111"/><circle cx="10" cy="10" r="1.4" fill="#111"/><circle cx="13" cy="13" r="1.4" fill="#111"/></svg></button></div>
+              <sc-if value="{{ showLikes }}" hint-placeholder-val="{{ true }}"><button style="position: absolute; bottom: -14px; right: 18px; width: 40px; height: 40px; border: none; border-radius: 50%; background: #fff; box-shadow: 0 3px 10px rgba(0,0,0,.16); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 2;" style-active="transform: scale(.9);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 20s-7-4.5-7-9.3A3.9 3.9 0 0 1 12 8a3.9 3.9 0 0 1 7 2.7C19 15.5 12 20 12 20z" stroke="var(--accent)" stroke-width="1.8" stroke-linejoin="round"/></svg></button></sc-if>
+            </div>
+
+            <!-- vitals card -->
+            <div style="background: #fff; border-radius: 18px; padding: 6px 18px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,.04);">
+              <sc-for list="{{ vitals }}" as="v" hint-placeholder-count="4">
+                <div style="display: flex; align-items: center; gap: 13px; padding: 13px 0; border-bottom: {{ v.border }};"><span style="color: #8E8E93; display: flex; width: 22px;">{{ v.icon }}</span><span style="font-size: 16px; color: #111;">{{ v.label }}</span></div>
+              </sc-for>
+            </div>
+
+            <!-- prompt 3 -->
+            <div style="position: relative; background: var(--card-bg); border: var(--card-border); box-shadow: var(--card-shadow); border-radius: 18px; padding: 18px; margin-bottom: 12px;">
+              <div style="font-size: 13px; color: #8E8E93; font-weight: 500;">{{ p2.q }}</div>
+              <div contenteditable="true" style="font-size: 21px; color: #111; line-height: 1.32; margin-top: 8px; font-weight: 500;" style-focus="background: #FFF5E5; border-radius: 6px;">{{ p2.a }}</div>
+              <div style="position: absolute; top: 14px; right: 14px; display: flex; gap: 6px;"><button onClick="{{ p2.regen }}" style="width: 30px; height: 30px; border: 1px solid #E5E5EA; background: #F2F2F7; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;" style-active="transform: rotate(-90deg); transition: transform .3s;"><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="14" height="14" rx="4" stroke="#111" stroke-width="1.6"/><circle cx="7" cy="7" r="1.4" fill="#111"/><circle cx="10" cy="10" r="1.4" fill="#111"/><circle cx="13" cy="13" r="1.4" fill="#111"/></svg></button></div>
+              <sc-if value="{{ showLikes }}" hint-placeholder-val="{{ true }}"><button style="position: absolute; bottom: -14px; right: 18px; width: 40px; height: 40px; border: none; border-radius: 50%; background: #fff; box-shadow: 0 3px 10px rgba(0,0,0,.16); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 2;" style-active="transform: scale(.9);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 20s-7-4.5-7-9.3A3.9 3.9 0 0 1 12 8a3.9 3.9 0 0 1 7 2.7C19 15.5 12 20 12 20z" stroke="var(--accent)" stroke-width="1.8" stroke-linejoin="round"/></svg></button></sc-if>
+            </div>
+
+            <!-- photo 3 -->
+            <div style="position: relative; border-radius: 18px; overflow: hidden; aspect-ratio: 3 / 4; margin-bottom: 12px;">
+              <image-slot id="aisle-pf-3" src="uploads/pasted-1784142133120-0.png" shape="rect" placeholder="Photo 3"></image-slot>
+              <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.5), rgba(0,0,0,0) 34%); pointer-events: none;"></div>
+              <div style="position: absolute; left: 16px; bottom: 15px; right: 66px; font-size: 15px; font-weight: 500; color: #fff; pointer-events: none; text-shadow: 0 1px 4px rgba(0,0,0,.35);">Golden hour in Gokarna</div>
+              <sc-if value="{{ showLikes }}" hint-placeholder-val="{{ true }}"><button style="position: absolute; bottom: 14px; right: 14px; width: 46px; height: 46px; border: none; border-radius: 50%; background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,.2); display: flex; align-items: center; justify-content: center; cursor: pointer;" style-active="transform: scale(.9);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 20s-7-4.5-7-9.3A3.9 3.9 0 0 1 12 8a3.9 3.9 0 0 1 7 2.7C19 15.5 12 20 12 20z" stroke="var(--accent)" stroke-width="1.8" stroke-linejoin="round"/></svg></button></sc-if>
+            </div>
+
+            <!-- photo 4 -->
+            <div style="position: relative; border-radius: 18px; overflow: hidden; aspect-ratio: 4 / 3; margin-bottom: 12px;">
+              <image-slot id="aisle-pf-4" src="uploads/pasted-1784142058299-0.png" shape="rect" placeholder="Photo 4"></image-slot>
+              <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.5), rgba(0,0,0,0) 34%); pointer-events: none;"></div>
+              <div style="position: absolute; left: 16px; bottom: 15px; right: 66px; font-size: 15px; font-weight: 500; color: #fff; pointer-events: none; text-shadow: 0 1px 4px rgba(0,0,0,.35);">Made a friend in Nubra Valley</div>
+              <sc-if value="{{ showLikes }}" hint-placeholder-val="{{ true }}"><button style="position: absolute; bottom: 14px; right: 14px; width: 46px; height: 46px; border: none; border-radius: 50%; background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,.2); display: flex; align-items: center; justify-content: center; cursor: pointer;" style-active="transform: scale(.9);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 20s-7-4.5-7-9.3A3.9 3.9 0 0 1 12 8a3.9 3.9 0 0 1 7 2.7C19 15.5 12 20 12 20z" stroke="var(--accent)" stroke-width="1.8" stroke-linejoin="round"/></svg></button></sc-if>
+            </div>
+
+            <div style="text-align: center; padding: 8px 0 4px; font-size: 13px; color: #8E8E93;">Curated by Aisle AI from 12 photos · 3 prompts synthesized</div>
+          </div>
+
+          <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 12px 16px 30px; background: linear-gradient(to top, #EDEDF0 62%, rgba(237,237,240,0));">
+            <button onClick="{{ publish }}" style="width: 100%; height: 56px; border: none; border-radius: 28px; background: var(--accent); color: #fff; font-size: 17px; font-weight: 600; cursor: pointer; box-shadow: 0 6px 18px -6px var(--accent);" style-active="transform: scale(.98); filter: brightness(.95);">Publish Profile</button>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ============ MANUAL GRID (fallback) ============ -->
+      <sc-if value="{{ isManual }}" hint-placeholder-val="{{ false }}">
+        <div style="position: absolute; inset: 0; display: flex; flex-direction: column; animation: aisleFade .35s ease;">
+          <div style="padding: 62px 16px 12px; border-bottom: .5px solid #E5E5EA;">
+            <h1 style="margin: 0; font-size: 27px; font-weight: 700; letter-spacing: -.5px; color: #111;">Choose your photos</h1>
+            <p style="margin: 4px 0 0; font-size: 15px; color: #8E8E93;">Pick your 5 favourites to feature.</p>
+          </div>
+          <div style="flex: 1; overflow-y: auto; padding: 12px 16px 120px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px;">
+              <sc-for list="{{ manualTiles }}" as="t" hint-placeholder-count="12">
+                <div onClick="{{ t.toggle }}" style="position: relative; aspect-ratio: 1 / 1; border-radius: 10px; overflow: hidden; cursor: pointer;">
+                  <img src="{{ t.src }}" style="width: 100%; height: 100%; object-fit: cover; display: block; filter: {{ t.filter }};"/>
+                  <div style="position: absolute; top: 6px; right: 6px; width: 22px; height: 22px; border-radius: 50%; border: 2px solid #fff; background: {{ t.checkBg }}; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 1px rgba(0,0,0,.08);"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="opacity: {{ t.checkOpacity }};"><path d="M2 6.5l2.5 2.5L10 3.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 12px 16px 30px; background: linear-gradient(to top, #fff 62%, rgba(255,255,255,0));">
+            <button onClick="{{ goReview }}" style="width: 100%; height: 56px; border: none; border-radius: 28px; background: var(--accent); color: #fff; font-size: 17px; font-weight: 600; cursor: pointer;" style-active="transform: scale(.98);">Continue</button>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ============ SCREEN 2: PROCESSING ============ -->
+      <sc-if value="{{ isProcessing }}" hint-placeholder-val="{{ false }}">
+        <div style="position: absolute; inset: 0; z-index: 40; background: #0D0D0F; display: flex; flex-direction: column; align-items: center; justify-content: center; animation: aisleFade .5s ease;">
+          <!-- scan card -->
+          <div style="position: relative; width: 210px; height: 270px; border-radius: 22px; overflow: hidden; box-shadow: 0 20px 50px -10px rgba(0,0,0,.6);">
+            <img src="{{ scanSrc }}" key="{{ scanIndex }}" style="width: 100%; height: 100%; object-fit: cover; display: block; animation: aisleScanImg .5s ease;"/>
+            <div style="position: absolute; inset: 0; background: linear-gradient(120deg, rgba(255,79,94,.14), rgba(123,47,247,.14));"></div>
+            <!-- corner brackets -->
+            <div style="position: absolute; top: 14px; left: 14px; width: 26px; height: 26px; border-top: 3px solid var(--accent); border-left: 3px solid var(--accent); border-radius: 4px 0 0 0;"></div>
+            <div style="position: absolute; top: 14px; right: 14px; width: 26px; height: 26px; border-top: 3px solid var(--accent); border-right: 3px solid var(--accent); border-radius: 0 4px 0 0;"></div>
+            <div style="position: absolute; bottom: 14px; left: 14px; width: 26px; height: 26px; border-bottom: 3px solid var(--accent); border-left: 3px solid var(--accent); border-radius: 0 0 0 4px;"></div>
+            <div style="position: absolute; bottom: 14px; right: 14px; width: 26px; height: 26px; border-bottom: 3px solid var(--accent); border-right: 3px solid var(--accent); border-radius: 0 0 4px 0;"></div>
+            <!-- scanning beam -->
+            <div style="position: absolute; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, transparent, var(--accent), transparent); box-shadow: 0 0 14px 2px var(--accent); animation: aisleBeam 2.4s ease-in-out infinite;"></div>
+          </div>
+          <div style="min-height: 26px; padding: 28px 40px 0;">
+            <div style="font-size: 20px; font-weight: 600; color: #fff; text-align: center; line-height: 1.3; letter-spacing: -.2px; animation: aisleFade .4s ease;" key="{{ processingStep }}">{{ processingText }}</div>
+          </div>
+          <!-- filmstrip -->
+          <div style="position: absolute; bottom: 84px; left: 0; right: 0; display: flex; gap: 7px; justify-content: center; padding: 0 20px;">
+            <sc-for list="{{ filmStrip }}" as="f" hint-placeholder-count="12">
+              <div style="width: 30px; height: 40px; border-radius: 6px; overflow: hidden; opacity: {{ f.opacity }}; outline: {{ f.outline }}; outline-offset: 1px; transition: opacity .3s, outline-color .3s; flex: none;"><img src="{{ f.src }}" style="width: 100%; height: 100%; object-fit: cover; display: block;"/></div>
+            </sc-for>
+          </div>
+          <div style="position: absolute; bottom: 54px; left: 0; right: 0; text-align: center; font-size: 12px; color: rgba(255,255,255,.4);">Analyzing {{ scanCount }} photos</div>
+        </div>
+      </sc-if>
+
+      <!-- ============ VOICE CALL OVERLAY ============ -->
+      <sc-if value="{{ callActive }}" hint-placeholder-val="{{ false }}">
+        <div style="position: absolute; inset: 0; z-index: 84; background: linear-gradient(160deg, var(--accent) 0%, var(--accent-2) 100%); display: flex; flex-direction: column; align-items: center; animation: aisleFade .35s ease;">
+          <div style="padding-top: 96px; text-align: center;">
+            <div style="position: relative; width: 128px; height: 128px; margin: 0 auto;">
+              <div style="position: absolute; inset: 0; border-radius: 50%; background: rgba(255,255,255,.35); animation: aisleRing 2s ease-out infinite;"></div>
+              <div style="position: absolute; inset: 0; border-radius: 50%; background: rgba(255,255,255,.35); animation: aisleRing 2s ease-out infinite 1s;"></div>
+              <div style="position: absolute; inset: 12px; border-radius: 32px; background: rgba(255,255,255,.18); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; animation: aislePulse 2s ease-in-out infinite;">
+                <svg width="48" height="48" viewBox="0 0 22 22" fill="none"><path d="M11 4l2.2 4.4L18 9.2l-3.5 3.4.8 4.8L11 15.2 6.7 17.4l.8-4.8L4 9.2l4.8-.8z" fill="#fff"/></svg>
+              </div>
+            </div>
+            <div style="font-size: 24px; font-weight: 700; color: #fff; margin-top: 26px; letter-spacing: -.3px;">Aisle AI</div>
+            <div style="font-size: 15px; color: rgba(255,255,255,.85); margin-top: 4px; font-variant-numeric: tabular-nums;">{{ callStatus }} · {{ callTime }}</div>
+          </div>
+          <div style="flex: 1; display: flex; align-items: center; padding: 0 40px;">
+            <div style="background: rgba(255,255,255,.16); border-radius: 20px; padding: 18px 20px; backdrop-filter: blur(6px);">
+              <div style="font-size: 12px; color: rgba(255,255,255,.7); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px;">Now asking</div>
+              <div style="font-size: 18px; color: #fff; line-height: 1.35; font-weight: 500;">{{ callQuestion }}</div>
+            </div>
+          </div>
+          <!-- waveform -->
+          <div style="display: flex; align-items: center; gap: 4px; height: 44px; margin-bottom: 30px;">
+            <sc-for list="{{ callWave }}" as="w" hint-placeholder-count="20">
+              <div style="width: 4px; background: rgba(255,255,255,.85); border-radius: 3px; height: 60%; transform-origin: center; animation: aisleWave {{ w.dur }}s ease-in-out infinite {{ w.delay }}s; animation-play-state: {{ wavePlay }};"></div>
+            </sc-for>
+          </div>
+          <!-- controls -->
+          <div style="display: flex; gap: 26px; padding-bottom: 56px; align-items: center;">
+            <button onClick="{{ toggleMute }}" style="width: 62px; height: 62px; border: none; border-radius: 50%; background: {{ muteBg }}; display: flex; align-items: center; justify-content: center; cursor: pointer;" style-active="transform: scale(.92);">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><rect x="9" y="3" width="6" height="11" rx="3" fill="{{ muteIcon }}"/><path d="M6 11a6 6 0 0 0 12 0M12 17v3" stroke="{{ muteIcon }}" stroke-width="1.8" stroke-linecap="round"/><path d="M4 4l16 16" stroke="{{ muteIcon }}" stroke-width="1.8" stroke-linecap="round" style="opacity: {{ muteSlash }};"/></svg>
+            </button>
+            <button onClick="{{ endCall }}" style="width: 68px; height: 68px; border: none; border-radius: 50%; background: #FF3B30; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 8px 20px -4px rgba(0,0,0,.4);" style-active="transform: scale(.92);">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none"><path d="M5 15l2.5-.4c.4-.1.7-.4.8-.8l.4-1.6c1.9-.7 4.1-.7 6 0l.4 1.6c.1.4.4.7.8.8l2.5.4c.5.1 1-.3 1-.8v-1.4c0-3-4-4.6-7.7-4.6S4 9.8 4 12.8v1.4c0 .5.5.9 1 .8z" fill="#fff" transform="rotate(135 12 12)"/></svg>
+            </button>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ============ FALLBACK 2A: VISION FAILURE ============ -->
+      <sc-if value="{{ showVisionSheet }}" hint-placeholder-val="{{ false }}">
+        <div style="position: absolute; inset: 0; z-index: 80; background: rgba(0,0,0,.4); animation: aisleFade .3s ease;">
+          <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 42%; background: #fff; border-radius: 24px 24px 0 0; padding: 14px 24px 34px; display: flex; flex-direction: column; align-items: center; text-align: center; animation: aisleSheetIn .45s cubic-bezier(.32,.72,0,1) both;">
+            <div style="width: 36px; height: 5px; border-radius: 3px; background: #D1D1D6; margin-bottom: 22px;"></div>
+            <div style="width: 48px; height: 48px; border-radius: 50%; background: #FFF5E5; display: flex; align-items: center; justify-content: center; animation: aislePop .5s ease both;">
+              <svg width="26" height="26" viewBox="0 0 26 26" fill="none"><path d="M2 13s4-6.5 11-6.5c2 0 3.7.5 5.2 1.3" stroke="#FF9500" stroke-width="2" stroke-linecap="round"/><circle cx="13" cy="13" r="3.2" stroke="#FF9500" stroke-width="2"/><path d="M20 10l3.5 6h-7z" fill="#FFF5E5" stroke="#FF9500" stroke-width="1.8" stroke-linejoin="round"/><path d="M20 12.2v1.6M20 15.2v.05" stroke="#FF9500" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </div>
+            <h2 style="margin: 18px 0 0; font-size: 22px; font-weight: 700; letter-spacing: -.3px; color: #111;">Let's pick these together.</h2>
+            <p style="margin: 8px 0 0; font-size: 17px; line-height: 1.4; color: #333;">We couldn't detect enough clear faces to build your Top 5 automatically.</p>
+            <div style="flex: 1;"></div>
+            <button onClick="{{ chooseManually }}" style="width: 100%; height: 56px; border: none; border-radius: 28px; background: var(--accent); color: #fff; font-size: 17px; font-weight: 600; cursor: pointer;" style-active="transform: scale(.98);">Choose Manually</button>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- SUCCESS OVERLAY -->
+      <sc-if value="{{ published }}" hint-placeholder-val="{{ false }}">
+        <div style="position: absolute; inset: 0; z-index: 90; background: rgba(255,255,255,.97); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; animation: aisleFade .4s ease; overflow: hidden;">
+          <sc-for list="{{ confetti }}" as="c" hint-placeholder-count="0">
+            <div style="position: absolute; top: -20px; left: {{ c.left }}%; width: {{ c.size }}px; height: {{ c.size }}px; background: {{ c.bg }}; border-radius: {{ c.radius }}; animation: aisleConfetti {{ c.dur }}s ease-in {{ c.delay }}s forwards;"></div>
+          </sc-for>
+          <div style="width: 88px; height: 88px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; animation: aislePop .5s ease both; z-index: 2;">
+            <svg width="44" height="44" viewBox="0 0 44 44" fill="none"><path d="M12 23l7 7 14-16" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div style="text-align: center; z-index: 2;">
+            <h1 style="margin: 0; font-size: 26px; font-weight: 700; letter-spacing: -.4px; color: #111;">You're live.</h1>
+            <p style="margin: 8px 0 0; font-size: 17px; color: #333;">Your profile is now in the mix.</p>
+          </div>
+          <button onClick="{{ restart }}" style="margin-top: 8px; padding: 12px 22px; border: 1px solid #E5E5EA; background: #fff; border-radius: 22px; font-size: 15px; font-weight: 600; color: var(--accent); cursor: pointer; z-index: 2;">Run the flow again</button>
+        </div>
+      </sc-if>
+
+      <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; border-radius: 3px; background: {{ homeColor }}; z-index: 75;"></div>
+
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:453,&quot;height&quot;:912},&quot;startScreen&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Upload&quot;,&quot;Processing&quot;,&quot;Review&quot;,&quot;Vibe Check&quot;,&quot;Publish&quot;],&quot;default&quot;:&quot;Upload&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Demo&quot;},&quot;visionFailure&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Demo&quot;},&quot;processingSecs&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:10,&quot;min&quot;:6,&quot;max&quot;:16,&quot;step&quot;:1,&quot;unit&quot;:&quot;s&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Demo&quot;},&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#FF4F5E&quot;,&quot;options&quot;:[&quot;#FF4F5E&quot;,&quot;#7B2FF7&quot;,&quot;#17B890&quot;,&quot;#2A6FDB&quot;,&quot;#FF8A3D&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Style&quot;},&quot;photoCorners&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Rounded&quot;,&quot;Sharp&quot;],&quot;default&quot;:&quot;Rounded&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Style&quot;},&quot;heroShape&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Tall 4:5&quot;,&quot;Square&quot;,&quot;Portrait 3:4&quot;],&quot;default&quot;:&quot;Tall 4:5&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Style&quot;},&quot;promptCard&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Bordered&quot;,&quot;Filled&quot;,&quot;Minimal&quot;],&quot;default&quot;:&quot;Bordered&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Style&quot;},&quot;showLikes&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Style&quot;}}">
+const PHOTOS = [
+  'uploads/pasted-1784141784172-0.png',
+  'uploads/pasted-1784142133120-0.png',
+  'uploads/pasted-1784142058299-0.png',
+  'uploads/pasted-1784142090408-0.png',
+  'uploads/pasted-1784142025672-0.png',
+  'uploads/pasted-1784141984562-0.png',
+  'uploads/pasted-1784142249961-0.png',
+  'uploads/pasted-1784142049864-0.png',
+  'uploads/pasted-1784142247570-0.png',
+  'uploads/pasted-1784142253095-0.png',
+  'uploads/pasted-1784142256274-0.png',
+  'uploads/pasted-1784142242479-0.png',
+];
+
+const QUESTIONS = [
+  "Let's skip the small talk — what's a controversy you stand by?",
+  "Love it. What's something you're irrationally competitive about?",
+  "Noted. If your friends described you in one slightly-unflattering word, what would it be?",
+  "Ha, honest. What's a tiny thing that instantly makes you trust someone?",
+  "Last one — what are you secretly a little too good at?",
+];
+const ACKS = ["Bold. Writing that down.", "Oh, we can absolutely use that.", "Painfully relatable.", "That's a green flag, actually."];
+
+const AUTO = [
+  { ai: "To kick things off — what do you get up to on a free weekend?" },
+  { user: "Weekend rides, mostly — Ladakh got me hooked. Otherwise kayaking or hunting down good filter coffee." },
+  { ai: "Love that. What actually excites you these days?" },
+  { user: "Planning the next trip before I've unpacked from the last one — and side projects I swear I'll finish." },
+  { ai: "Noted. And what are you hoping to find on here?" },
+  { user: "Someone to split dessert with and argue about road-trip playlists. Long-term, but no rush." },
+  { ai: "Perfect — that's everything I need. Building your profile…" },
+];
+
+class Component extends DCLogic {
+  state = {
+    screen: 'upload',
+    photosSelected: false,
+    processingStep: 0,
+    scanIndex: 0,
+    showVisionSheet: false,
+    chat: [],
+    qIndex: 0,
+    qNum: 1,
+    userTyping: false,
+    vibeDone: false,
+    chatInput: '',
+    aiTyping: false,
+    showChips: false,
+    recording: false,
+    recSecs: 0,
+    callActive: false,
+    callSecs: 0,
+    muted: false,
+    published: false,
+    heroPressed: false,
+    promptIdx: [0, 0, 0],
+    manualSel: {},
+    confetti: [],
+  };
+
+  _timers = [];
+  _scan = null;
+  _rec = null;
+  _call = null;
+  rootRef = React.createRef();
+  chatInputRef = React.createRef();
+  chatScrollRef = React.createRef();
+
+  clearTimers() { this._timers.forEach(clearTimeout); this._timers = []; }
+  after(ms, fn) { this._timers.push(setTimeout(fn, ms)); }
+
+  componentDidMount() { this.applyStart(); this.setVars(); PHOTOS.forEach(src => { const im = new Image(); im.src = src; }); }
+  componentDidUpdate(prev) { if (prev.startScreen !== this.props.startScreen) this.applyStart(); this.setVars(); }
+  componentWillUnmount() { this.clearTimers(); clearInterval(this._scan); clearInterval(this._rec); clearInterval(this._call); }
+
+  setVars() {
+    const el = this.rootRef.current; if (!el) return;
+    const p = this.props;
+    const accent = p.accentColor || '#FF4F5E';
+    const partners = { '#FF4F5E': '#7B2FF7', '#7B2FF7': '#C2337A', '#17B890': '#0E7490', '#2A6FDB': '#7B2FF7', '#FF8A3D': '#FF4F5E' };
+    el.style.setProperty('--accent', accent);
+    el.style.setProperty('--accent-2', partners[accent] || '#7B2FF7');
+    el.style.setProperty('--img-radius', p.photoCorners === 'Sharp' ? '2px' : '16px');
+    el.style.setProperty('--hero-aspect', { 'Square': '1 / 1', 'Portrait 3:4': '3 / 4' }[p.heroShape] || '4 / 5');
+    const card = { 'Filled': ['#F2F2F7', '1px solid transparent', 'none'], 'Minimal': ['transparent', 'none', 'none'] }[p.promptCard] || ['#FFFFFF', '1px solid #E5E5EA', '0 1px 3px rgba(0,0,0,.04)'];
+    el.style.setProperty('--card-bg', card[0]);
+    el.style.setProperty('--card-border', card[1]);
+    el.style.setProperty('--card-shadow', card[2]);
+  }
+
+  applyStart() {
+    const map = { 'Upload': 'upload', 'Processing': 'processing', 'Review': 'review', 'Vibe Check': 'vibe', 'Publish': 'publish' };
+    const s = map[this.props.startScreen] || 'upload';
+    if (s === 'processing') { this.setState({ screen: 'upload', photosSelected: true }); this.beginProcessing(); }
+    else if (s === 'vibe') { this.setState({ screen: 'vibe', photosSelected: true }); this.startVibe(); }
+    else this.setState({ screen: s, photosSelected: s !== 'upload' });
+  }
+
+  go(screen) { this.clearTimers(); clearInterval(this._scan); this.setState({ screen, showVisionSheet: false }); }
+
+  selectPhotos = () => this.setState(s => ({ photosSelected: !s.photosSelected }));
+
+  beginProcessing = () => {
+    if (!this.state.photosSelected && this.state.screen === 'upload') return;
+    this.clearTimers();
+    this.setState({ screen: 'processing', processingStep: 0, scanIndex: 0, showVisionSheet: false });
+    clearInterval(this._scan);
+    this._scan = setInterval(() => this.setState(s => ({ scanIndex: s.scanIndex + 1 })), 620);
+    const total = (this.props.processingSecs || 10) * 1000;
+    if (this.props.visionFailure) { this.after(total * 0.32, () => { clearInterval(this._scan); this.setState({ showVisionSheet: true }); }); return; }
+    this.after(total * 0.25, () => this.setState({ processingStep: 1 }));
+    this.after(total * 0.5, () => this.setState({ processingStep: 2 }));
+    this.after(total * 0.75, () => this.setState({ processingStep: 3 }));
+    this.after(total, () => { clearInterval(this._scan); this.go('review'); });
+  };
+
+  chooseManually = () => { clearInterval(this._scan); this.go('manual'); };
+  goReview = () => this.go('review');
+  goVibe = () => { this.go('vibe'); this.startVibe(); };
+
+  startVibe = () => {
+    this.clearTimers();
+    this.setState({ chat: [], qNum: 1, vibeDone: false, aiTyping: false, userTyping: false });
+    this.after(600, () => this.playConvo(0));
+  };
+  playConvo(i) {
+    if (i >= AUTO.length) { this.setState({ vibeDone: true }); this.after(1600, () => this.go('publish')); return; }
+    const item = AUTO[i];
+    if (item.ai) {
+      const isFinal = i === AUTO.length - 1;
+      this.setState({ aiTyping: true, userTyping: false });
+      this.scrollChat();
+      this.after(1300, () => {
+        this.setState(s => ({ aiTyping: false, qNum: isFinal ? s.qNum : Math.floor(i / 2) + 1, chat: [...s.chat, { role: 'ai', text: item.ai }] }));
+        this.scrollChat();
+        this.after(850, () => this.playConvo(i + 1));
+      });
+    } else {
+      this.setState({ userTyping: true, aiTyping: false });
+      this.scrollChat();
+      this.after(1250, () => {
+        this.setState(s => ({ userTyping: false, chat: [...s.chat, { role: 'user', text: item.user }] }));
+        this.scrollChat();
+        this.after(800, () => this.playConvo(i + 1));
+      });
+    }
+  }
+
+  swap = () => {};
+  pressHero = () => this.setState({ heroPressed: true });
+  releasePress = () => this.setState({ heroPressed: false });
+
+  onChatInput = (e) => this.setState({ chatInput: e.target.value });
+  onChatKey = (e) => { if (e.key === 'Enter') { e.preventDefault(); this.sendChat(); } };
+  scrollChat() { this.after(40, () => { const el = this.chatScrollRef.current; if (el) el.scrollTop = el.scrollHeight; }); }
+
+  advance(userMsg) {
+    this.setState(s => ({ chat: [...s.chat, userMsg], chatInput: '', aiTyping: true, showChips: false }));
+    this.scrollChat();
+    this.after(1400, () => {
+      const qi = this.state.qIndex;
+      if (qi >= QUESTIONS.length - 1) {
+        this.setState(s => ({ aiTyping: false, chat: [...s.chat, { role: 'ai', text: "That's everything I need. Building your profile…" }] }));
+        this.scrollChat();
+        this.after(1200, () => this.go('publish'));
+      } else {
+        const ack = ACKS[qi % ACKS.length];
+        this.setState(s => ({ aiTyping: false, qIndex: s.qIndex + 1, chat: [...s.chat, { role: 'ai', text: ack }, { role: 'ai', text: QUESTIONS[qi + 1] }] }));
+        this.scrollChat();
+      }
+    });
+  }
+
+  sendChat = () => {
+    const text = (this.state.chatInput || '').trim();
+    if (!text || this.state.aiTyping) return;
+    const lowSet = ['nothing', 'yes', 'no', 'ok', 'okay', 'idk', 'nah', 'sure', 'maybe', 'yeah', 'yep', 'nope', 'dunno'];
+    const lowEntropy = text.split(/\s+/).length <= 1 || lowSet.includes(text.toLowerCase());
+    if (lowEntropy) {
+      this.setState(s => ({ chat: [...s.chat, { role: 'user', text }], chatInput: '', aiTyping: true, showChips: false }));
+      this.scrollChat();
+      this.after(1400, () => { this.setState(s => ({ aiTyping: false, chat: [...s.chat, { role: 'ai', text: "Keeping it mysterious. Pick a starter below and fill in the blank." }], showChips: true })); this.scrollChat(); });
+      return;
+    }
+    this.advance({ role: 'user', text });
+  };
+
+  pickChip = (text) => { this.setState({ chatInput: text, showChips: false }); this.after(60, () => { const el = this.chatInputRef.current; if (el) { el.focus(); const v = el.value; el.value = ''; el.value = v; } }); };
+
+  fmt(s) { const m = Math.floor(s / 60); const ss = s % 60; return m + ':' + (ss < 10 ? '0' : '') + ss; }
+
+  startRec = () => { this.setState({ recording: true, recSecs: 0 }); clearInterval(this._rec); this._rec = setInterval(() => this.setState(s => ({ recSecs: s.recSecs + 1 })), 1000); };
+  cancelRec = () => { clearInterval(this._rec); this.setState({ recording: false, recSecs: 0 }); };
+  stopRec = () => { clearInterval(this._rec); const dur = this.fmt(Math.max(1, this.state.recSecs)); this.setState({ recording: false, recSecs: 0 }); this.advance({ role: 'user', voice: true, text: dur }); };
+
+  openCall = () => { this.setState({ callActive: true, callSecs: 0, muted: false }); clearInterval(this._call); this._call = setInterval(() => this.setState(s => ({ callSecs: s.callSecs + 1 })), 1000); };
+  toggleMute = () => this.setState(s => ({ muted: !s.muted }));
+  endCall = () => { clearInterval(this._call); const dur = this.fmt(Math.max(2, this.state.callSecs)); this.setState({ callActive: false }); this.advance({ role: 'user', voice: true, text: dur }); };
+
+  regen = (i) => this.setState(s => { const p = [...s.promptIdx]; p[i] = (p[i] + 1) % 3; return { promptIdx: p }; });
+  toggleTile = (i) => this.setState(s => ({ manualSel: { ...s.manualSel, [i]: !s.manualSel[i] } }));
+
+  publish = () => {
+    const colors = [this.props.accentColor || '#FF4F5E', '#7B2FF7', '#FF9500', '#34C759', '#5AC8FA', '#FFD60A'];
+    const confetti = Array.from({ length: 64 }, () => ({ left: Math.round(Math.random() * 100), size: 7 + Math.round(Math.random() * 8), bg: colors[Math.floor(Math.random() * colors.length)], radius: Math.random() > .5 ? '50%' : '2px', dur: (1.6 + Math.random() * 1.4).toFixed(2), delay: (Math.random() * .5).toFixed(2) }));
+    this.setState({ published: true, confetti });
+  };
+  restart = () => { this.clearTimers(); this.setState({ screen: 'upload', photosSelected: false, processingStep: 0, scanIndex: 0, showVisionSheet: false, chat: [], qIndex: 0, qNum: 1, userTyping: false, vibeDone: false, chatInput: '', aiTyping: false, showChips: false, recording: false, callActive: false, published: false, promptIdx: [0, 0, 0], manualSel: {}, confetti: [] }); };
+
+  renderVals() {
+    const s = this.state;
+    const dark = s.screen === 'processing';
+    const accent = this.props.accentColor || '#FF4F5E';
+
+    const chat = s.chat.map(m => m.role === 'ai'
+      ? { text: m.text, isText: true, isVoice: false, justify: 'flex-start', bg: '#F2F2F7', color: '#111', blr: '6px', brr: '20px' }
+      : (m.voice ? { text: m.text, isText: false, isVoice: true, justify: 'flex-end' }
+        : { text: m.text, isText: true, isVoice: false, justify: 'flex-end', bg: accent, color: '#fff', blr: '20px', brr: '6px' }));
+
+    const chipTexts = ["A hill I'll die on is…", "I'm weirdly competitive about…", "People trust me when…", "I'm secretly great at…"];
+    const chips = chipTexts.map(t => ({ text: t, pick: () => this.pickChip(t) }));
+
+    const promptData = [
+      { q: 'A controversy I stand by', opts: ["Cereal is a soup. I've lost friends over this and I'd do it again.", "The book isn't always better than the movie. Fight me.", "Pineapple on pizza is elite and I won't be taking questions."] },
+      { q: "I'm weirdly competitive about", opts: ["Reversing into tight parking spots. Clap for me and I'm yours.", "Board-game night. I will absolutely betray you in Catan.", "Finding the cheapest flight. It's a personality trait now."] },
+      { q: "You should leave a comment if", opts: ["You can out-argue me on the best road-trip playlist.", "You've got a Ladakh story better than mine (doubt it).", "You'll split a dessert instead of pretending you're full."] },
+    ];
+    const promptCards = promptData.map((p, i) => ({ q: p.q, a: p.opts[s.promptIdx[i]], regen: () => this.regen(i) }));
+
+    const ic = (d, opts) => React.createElement('svg', { width: 18, height: 18, viewBox: '0 0 20 20', fill: 'none' }, React.createElement('path', Object.assign({ d, stroke: 'currentColor', strokeWidth: 1.6, strokeLinecap: 'round', strokeLinejoin: 'round' }, opts || {})));
+    const basics = [
+      { icon: ic('M10 2C6.7 2 4 4.7 4 8c0 4 6 10 6 10s6-6 6-10c0-3.3-2.7-6-6-6z M10 6.5a1.6 1.6 0 100 3.2 1.6 1.6 0 000-3.2z'), label: 'Bengaluru' },
+      { icon: ic('M6 3v14M14 3v14M6 10h8M6 6l8 8'), label: "6'0\"" },
+      { icon: ic('M3 7h14v9H3zM7 7V5a3 3 0 016 0v2'), label: 'Product Designer' },
+    ];
+    const vitals = [
+      { icon: ic('M3 7h14v9H3zM7 7V5a3 3 0 016 0v2'), label: 'Product Designer at a fintech', border: '.5px solid #EEE' },
+      { icon: ic('M10 3L2 7l8 4 8-4-8-4zM4 9v4c0 1 2.7 2.5 6 2.5S16 14 16 13V9'), label: 'IIT Bombay', border: '.5px solid #EEE' },
+      { icon: ic('M10 2C6.7 2 4 4.7 4 8c0 4 6 10 6 10s6-6 6-10c0-3.3-2.7-6-6-6z'), label: 'Grew up in Jaipur', border: '.5px solid #EEE' },
+      { icon: ic('M10 3a4 4 0 014 4c0 3-4 4-4 4M10 15v.01'), label: 'Looking for something real', border: 'none' },
+    ];
+
+    const filmStrip = PHOTOS.map((src, i) => ({ src, opacity: (i === (s.scanIndex % PHOTOS.length)) ? 1 : 0.28, outline: (i === (s.scanIndex % PHOTOS.length)) ? '2px solid ' + accent : '2px solid transparent' }));
+
+    const manualTiles = PHOTOS.map((src, i) => { const on = !!s.manualSel[i]; return { src, toggle: () => this.toggleTile(i), filter: on ? 'none' : 'brightness(.82)', checkBg: on ? accent : 'rgba(0,0,0,.25)', checkOpacity: on ? 1 : 0 }; });
+
+    const gridPhotos = [
+      { id: 'aisle-top-2', src: 'uploads/pasted-1784142090408-0.png', rank: '2' },
+      { id: 'aisle-top-3', src: 'uploads/pasted-1784142133120-0.png', rank: '3' },
+      { id: 'aisle-top-4', src: 'uploads/pasted-1784142058299-0.png', rank: '4' },
+      { id: 'aisle-top-5', src: 'uploads/pasted-1784142025672-0.png', rank: '5' },
+    ];
+
+    const waveBars = Array.from({ length: 16 }, (_, i) => ({ dur: (0.6 + (i % 5) * 0.18).toFixed(2), delay: (i * 0.06).toFixed(2) }));
+    const callWave = Array.from({ length: 22 }, (_, i) => ({ dur: (0.5 + (i % 6) * 0.16).toFixed(2), delay: (i * 0.05).toFixed(2) }));
+
+    return {
+      rootRef: this.rootRef,
+      isUpload: s.screen === 'upload', isProcessing: s.screen === 'processing', isReview: s.screen === 'review', isVibe: s.screen === 'vibe', isPublish: s.screen === 'publish', isManual: s.screen === 'manual',
+      statusColor: dark ? '#fff' : '#111',
+      homeColor: dark ? 'rgba(255,255,255,.55)' : 'rgba(0,0,0,.35)',
+      // screen 1
+      notSelected: !s.photosSelected,
+      photosSelected: s.photosSelected,
+      selectPhotos: this.selectPhotos,
+      beginProcessing: this.beginProcessing,
+      allPhotos: PHOTOS,
+      ctaBg: s.photosSelected ? accent : '#C7C7CC',
+      ctaCursor: s.photosSelected ? 'pointer' : 'default',
+      ctaLabel: s.photosSelected ? 'Curate My Top 5' : 'Select photos to continue',
+      // review
+      gridPhotos,
+      heroTransform: s.heroPressed ? 'scale(1.05)' : 'scale(1)',
+      heroShadow: s.heroPressed ? '0 18px 40px rgba(0,0,0,.28)' : '0 1px 3px rgba(0,0,0,.08)',
+      pressHero: this.pressHero, releasePress: this.releasePress, swap: this.swap, goVibe: this.goVibe, goReview: this.goReview,
+      // processing
+      processingStep: s.processingStep,
+      processingText: ['Scanning for clear lighting…', 'Detecting your best smile…', 'Cross-referencing top profiles…', 'Enhancing colour & contrast…'][s.processingStep] || 'Scanning…',
+      scanSrc: PHOTOS[s.scanIndex % PHOTOS.length],
+      scanIndex: s.scanIndex,
+      filmStrip, scanCount: PHOTOS.length,
+      // vibe
+      qProgress: s.vibeDone ? 'Complete' : 'Question ' + s.qNum + ' of 3',
+      userTyping: s.userTyping, vibeDone: s.vibeDone, vibeRunning: !s.vibeDone,
+      chat, aiTyping: s.aiTyping, chatInput: s.chatInput,
+      onChatInput: this.onChatInput, onChatKey: this.onChatKey, sendChat: this.sendChat,
+      sendOpacity: (s.chatInput || '').trim() ? 1 : 0.4,
+      showInputBar: !s.recording && !s.showChips,
+      recording: s.recording, recTime: this.fmt(s.recSecs), startRec: this.startRec, stopRec: this.stopRec, cancelRec: this.cancelRec,
+      waveBars,
+      showChips: s.showChips, chips,
+      chatInputRef: this.chatInputRef, chatScrollRef: this.chatScrollRef,
+      // call
+      callActive: s.callActive, openCall: this.openCall, endCall: this.endCall, toggleMute: this.toggleMute,
+      callTime: this.fmt(s.callSecs), callStatus: s.muted ? 'Muted' : 'Listening',
+      callQuestion: QUESTIONS[s.qIndex],
+      callWave, wavePlay: s.muted ? 'paused' : 'running',
+      muteBg: s.muted ? '#fff' : 'rgba(255,255,255,.2)', muteIcon: s.muted ? accent : '#fff', muteSlash: s.muted ? 1 : 0,
+      // publish
+      p0: promptCards[0], p1: promptCards[1], p2: promptCards[2],
+      basics, vitals,
+      showLikes: this.props.showLikes !== false,
+      publish: this.publish, published: s.published, confetti: s.confetti, restart: this.restart,
+      // vision + manual
+      showVisionSheet: s.showVisionSheet, chooseManually: this.chooseManually, manualTiles,
+    };
+  }
+}
+</script>
+</body>
+</html>
